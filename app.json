@@ -25,6 +25,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "packagerOpts": {
+      "sourceExts": ["js", "jsx", "svg"],
+      "transformer": "node_modules/react-native-svg-transformer/index.js"
     }
   }
 }
