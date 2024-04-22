@@ -8,8 +8,8 @@ export default function App() {
   return (
     <Provider>
       <NavigationContainer>
-          <StatusBar style="auto"></StatusBar>
-          <RouterView/>
+        <StatusBar style="auto"></StatusBar>
+        <RouterView/>
       </NavigationContainer>
     </Provider>
   );

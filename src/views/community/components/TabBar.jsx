@@ -14,14 +14,6 @@ const TabBar = ({ tabs, onTabPress, activeIndex }) => {
   const navigation = useNavigation()
 
   const borderPosition = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    Animated.timing(borderPosition, {
-      toValue: activeIndex *  width * (1.6),
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }, [activeIndex]);
-
   const renderTabs = () => {
     return tabs.map((tab, index) => {
       return (
@@ -30,7 +22,7 @@ const TabBar = ({ tabs, onTabPress, activeIndex }) => {
           onPress={() => {
             onTabPress(index);
             Animated.timing(borderPosition, {
-              toValue: index *  width * (tab.title.length / 1.8),
+              toValue: index *  width * (tab.title.length),
               duration: 200,
               useNativeDriver: true,
             }).start();
@@ -46,7 +38,7 @@ const TabBar = ({ tabs, onTabPress, activeIndex }) => {
     });
   };
 
-  const width = 35; // 根据你的布局调整这个宽度
+  const width = 25; // 根据你的布局调整这个宽度
 
   return (
     <View style={styles.tabBar}>

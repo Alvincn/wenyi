@@ -28,8 +28,11 @@ const FooterTab = () => {
         tabBarActiveTintColor: themeColor.primary,
       })}
     >
+      {/*首页*/}
       <Tab.Screen name="HomeScreen" component={HomeScreen} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
+      {/*地图*/}
       <Tab.Screen name="MapView" component={MapScreen} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
+      {/*社区*/}
       <Tab.Screen name="Community" component={CommunityScreen} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
     </Tab.Navigator>
 

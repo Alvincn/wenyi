@@ -4,7 +4,7 @@ import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView} from "react
 import {Ionicons} from "@expo/vector-icons";
 import {themeColor} from "../../../config/theme";
 import TabBar from "./TabBar";
-import {HomeTab} from "../../../config/config";
+import {communityTab, HomeTab, userInfo} from "../../../config/config";
 import {useCurrentRoute} from "../../../utils/routeUtils";
 
 const Header = () => {
@@ -13,10 +13,10 @@ const Header = () => {
 
   useEffect(() => {
     switch (currentRouter){
-      case 'Hot':
+      case 'Post':
         setActiveIndex(0)
         break
-      case 'Heritage':
+      case 'Topic':
         setActiveIndex(1)
         break
     }
@@ -26,11 +26,11 @@ const Header = () => {
   const onTabPress = (index) => {
     switch (index) {
       case 0:
-        navigation.navigate('Hot')
+        navigation.navigate('Post')
         setActiveIndex(0)
         break;
       case 1:
-        navigation.navigate('Heritage')
+        navigation.navigate('Topic')
         setActiveIndex(1)
         break
     }
@@ -40,17 +40,17 @@ const Header = () => {
   // 切换
   return (
     <View className="justify-between flex-row items-center mb-2">
-      <TouchableOpacity
-        onPress={() => {navigation.navigate("Mine")}}
-      >
-        <Image source={require('../imgs/ocba.jpg')} style={{width: 30, height: 30, borderRadius: 50}}></Image>
-      </TouchableOpacity>
-      <View className="flex-row justify-center">
-        <TabBar tabs={HomeTab} onTabPress={onTabPress} activeIndex={activeIndex} />
-      </View>
       <View className="w-6">
-        <Ionicons name="search" size={25} color={'black'} />
+        <Ionicons name="search" size={27} color={'black'} />
       </View>
+      <View className="flex-row justify-center">
+        <TabBar tabs={communityTab} onTabPress={onTabPress} activeIndex={activeIndex} />
+      </View>
+      <TouchableOpacity
+        onPress={() => {navigation.navigate("WritePost")}}
+      >
+        <Ionicons name="add-circle-outline" size={27} color={'black'} />
+      </TouchableOpacity>
     </View>
   );
 };

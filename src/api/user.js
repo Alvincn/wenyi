@@ -6,7 +6,7 @@ import request from '../utils/request'
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
 export const getFindUserByUserName = (params) => {
-  return request.get('/findUserByUserName', {
+  return request.get('/user/findUserByUserName', {
     params
   })
 }
@@ -16,8 +16,8 @@ export const getFindUserByUserName = (params) => {
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
 export const postRegister = (user) => {
-  return request.post('/register',user )
+  return request.post('/user/register',user )
 }
 export const postLogin = (user) => {
-  return request.post('/login', user)
+  return request.post('/user/login', user)
 }

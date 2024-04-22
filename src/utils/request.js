@@ -8,7 +8,8 @@ const request = axios.create({
 })
 // 请求拦截器
 request.interceptors.request.use(async config => {
-  if (await AsyncStorage.getItem('token')) {
+  let token = await AsyncStorage.getItem('token')
+  if (token) {
     config.headers.Authorization = 'Bearer ' + await AsyncStorage.getItem('token')
   }
   return config

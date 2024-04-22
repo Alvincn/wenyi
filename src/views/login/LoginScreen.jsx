@@ -15,6 +15,7 @@ import {themeColor} from "../../config/theme";
 import {Ionicons} from "@expo/vector-icons";
 import {getFindUserByUserName, postRegister, postLogin} from "../../api/user";
 import {Checkbox, PasswordInput, TextInput, Toast} from '@fruits-chain/react-native-xiaoshu'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -68,13 +69,16 @@ const LoginScreen = () => {
   // 下一步
   const nextStep = () => {
     if(userState === 0) {
+      // 根据用户名查找用户
       getFindUserByUserName({
         userName: userName
       }).then(res => {
         animationSequence.start()
         if(res.code === 201){
+          // 新用户
           setUserState(2)
         }else {
+          // 老用户
           setUserState(1)
         }
       })
@@ -84,7 +88,12 @@ const LoginScreen = () => {
         postLogin({
           username: userName,
           password: password
-        }).then(res => {
+        }).then(async res => {
+          if (res.code !== 200) {
+            return Toast.fail(res.message)
+          }
+          await AsyncStorage.setItem('wenyiToken', res.data)
+          navigation.navigate('Home')
         })
       }else {
         Toast({
@@ -101,7 +110,13 @@ const LoginScreen = () => {
           postLogin({
             username: userName,
             password: password
-          }).then(res => {
+          }).then(async res => {
+            if (res.code !== 200) {
+              return Toast.fail(res.message)
+            }
+            await AsyncStorage.setItem('wenyiToken', res.data)
+            navigation.navigate('Home')
+
           })
         })
       }else {
@@ -210,6 +225,9 @@ const LoginScreen = () => {
    * 密码输入框
    * @returns {JSX.Element}
    */
+  const changeShowPassword = () => {
+    Keyboard.dismiss()
+  }
   const passwordInputBox = () => {
     return (
       <Animated.View
@@ -235,8 +253,9 @@ const LoginScreen = () => {
           <View className="flex-1">
             <PasswordInput
               value={password}
+              onChangeSecureTextEntry={changeShowPassword}
               onChangeText={setPassword}
-              placeholder={userState === 1?"请输入密码~": "请设置密码~"}
+              placeholder={userState === 1? "请输入密码~": "请设置密码~"}
             ></PasswordInput>
           </View>
         </View>
@@ -265,7 +284,7 @@ const LoginScreen = () => {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
-      setKeyboardHeight(event.endCoordinates.height);
+      setKeyboardHeight(event.endCoordinates.height< 360? 360: event.endCoordinates.height);
       setKeyboardShow(true)
       // 在这里执行键盘弹起时的操作，比如调整界面布局等
     });
@@ -320,7 +339,7 @@ const LoginScreen = () => {
                 userInputBox():passwordInputBox()
             }
             {/* 下一步按钮 */}
-            <View className="absolute left-4 w-full h-14 bottom-14" style={{height: keyboardHeight}} >
+            <View className="absolute left-4 w-full h-14" style={{bottom: keyboardHeight}} >
               <TouchableOpacity
                 className="h-12 justify-center items-center rounded-xl mb-4 transition-all"
                 onPress={() => {
