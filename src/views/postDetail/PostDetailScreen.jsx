@@ -1,45 +1,44 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useNavigation} from "@react-navigation/native";
-import {View, Text, ScrollView, RefreshControl} from "react-native";
+import {View, Text, ScrollView, RefreshControl, TouchableWithoutFeedback, TouchableOpacity} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import HeaderTab from "../../components/headerTab/HeaderTab";
 import UserDetail from "./components/UserDetail";
 import BottomCount from "./components/BottomCount";
 import CommentItem from "../../components/comment/CommentItem";
+import {getPostById} from "../../api/post";
+import {RichEditor} from "react-native-pell-rich-editor";
+import {deleteRemoveCollection, getUserSavePost, postAddCollection} from "../../api/collection";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {deleteRemoveLikes, getUserLikesPost, postAddLikes} from "../../api/likes";
+import {Toast} from "@fruits-chain/react-native-xiaoshu";
 
 const PostDetailScreen = ({route}) => {
   const postId = route.params.postId
+  const [postDetail, setPostDetail] = useState({})
+  const richText = useRef(null)
+  const [userInfo, setUserInfo] = useState({})
+  const getPostDetail = async () => {
+    let result = await getPostById(postId)
+    setPostDetail(result.data)
+  }
+
+  useEffect(() => {
+    if(postDetail.postId === undefined){
+      return
+    }
+    userIsCollectionPost()
+    userIsLikesPost()
+  }, [postDetail]);
+
+  useEffect(() => {
+    getPostDetail()
+    AsyncStorage.getItem('userInfo').then(r => {
+      setUserInfo(JSON.parse(r))
+    })
+  }, [])
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = React.useState(false);
-  const postDetail =                                                                                                                                             {
-    title: '吹爆东北二人转！',
-    userDetail: {
-      name: '文驿官方',
-      location: '北京',
-      tag: '官方',
-      Avatar: require('./imgs/touxiang.png')
-    },
-    content: "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思 东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思 东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思 东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思 东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思 东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思\n" +
-      "        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思        东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是真的好看，有意思！东北二人转是意思！东北二人转是真的好看，有意思！",
-    postData: {
-      likeCount: 123,
-      collectionCount: 321,
-      commentCount: 23,
-    },
-    updateTime: '2024.4.13 21:33'
-  }
   const comments = [
     {
       userName: '小仙女',
@@ -71,11 +70,10 @@ const PostDetailScreen = ({route}) => {
     },
   ]
   // 下拉刷新
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false)
-    }, 1000)
+    await getPostDetail()
+    setRefreshing(false)
   }, []);
   // 元素-全部评论
   let commentAreaRef = useRef(null)
@@ -83,7 +81,70 @@ const PostDetailScreen = ({route}) => {
   // 0:显示数值，1:显示评论输入框
   const [commentShow, setCommentShow] = useState(0)
 
+  // 是否收藏
+  const [isCollection, setIsCollection] = useState(false)
+  const collectionClick = () => {
+    if(isCollection) {
+      deleteRemoveCollection(collectionData).then(async res => {
+        await userIsCollectionPost();
+        await getPostDetail()
+      })
+    }else {
+      postAddCollection(collectionData).then(async res => {
+        await userIsCollectionPost();
+        await getPostDetail()
+      })
+    }
+  }
+  // 是否喜欢
+  const [isLike, setIsLike] = useState(false)
+  const likeClick = () => {
+    if(isLike) {
+      deleteRemoveLikes(collectionData).then(async res => {
+        if(res.code !== 200) {
+          setTimeout(() => {
+            navigation.navigate("Login")
+          }, 1000)
+          return Toast.fail('未登录！')
+        }
+        await userIsLikesPost();
+        await getPostDetail()
+      })
+    }else {
+      postAddLikes(collectionData).then(async res => {
+        if(res.code !== 200) {
+          setTimeout(() => {
+            navigation.navigate("Login")
+          }, 1000)
+          return Toast.fail('未登录！')
+        }
+        await userIsLikesPost();
+        await getPostDetail()
+      })
+    }
 
+  }
+  const scrollRef = useRef(null)
+
+  const collectionData = useMemo(() => {
+    return {
+      postId: postDetail.postId
+    }
+  }, [postDetail, userInfo])
+  /**
+   * 判断当前用户是否收藏了该帖子
+   */
+  const userIsCollectionPost = async () => {
+    let result = await getUserSavePost(collectionData)
+    setIsCollection(result.data)
+  }
+  /**
+   * 判断当前用户是否收藏了该帖子
+   */
+  const userIsLikesPost = async () => {
+    let result = await getUserLikesPost(collectionData)
+    setIsLike(result.data)
+  }
   return (
     <SafeAreaView
       className="h-full"
@@ -93,6 +154,7 @@ const PostDetailScreen = ({route}) => {
       <ScrollView
         onScroll={({nativeEvent}) => {
           const {layoutMeasurement} = nativeEvent;
+          richText.current.blurContentEditor()
           if (commentAreaRef.current) {
             commentAreaRef.current.measure((x, y, width, height, pageX, pageY) => {
               if(layoutMeasurement.height > (pageY - 50)) {
@@ -109,23 +171,51 @@ const PostDetailScreen = ({route}) => {
         className="p-2"
       >
         {/* 用户信息 */}
-        <UserDetail userDetail={postDetail.userDetail}></UserDetail>
+        <UserDetail userDetail={postDetail.user}></UserDetail>
         {/* 帖子详细内容 */}
-        <View className="mt-2 pb-3">
-          <Text className="font-bold text-2xl">{postDetail.title}</Text>
-          <Text className="text-lg">
-            {postDetail.content}
+        <View className="bg-white rounded pt-1">
+          {/*标题*/}
+          <Text className="text-2xl px-2 pt-1 font-bold leading-6">
+            {postDetail.title}
           </Text>
-          <Text className="mt-2 text-gray-500">编辑于：{postDetail.updateTime}</Text>
+          {
+            postDetail.content &&
+            // 拦截点击事件，不传递给子元素
+            <TouchableOpacity
+              style={{pointerEvents: 'box-only'}}
+            >
+              <RichEditor
+                initialContentHTML={postDetail.content}
+                ref={richText}
+                editorStyle={{
+                  contentCSSText: 'font-size: 18px; line-height: 25px; padding-top: 5px'
+                }}
+                disabled={true}
+              />
+            </TouchableOpacity>
+          }
+          {postDetail.location &&
+            <Text className="pl-2 my-1">
+              地点：{postDetail.location}
+            </Text>}
+          <Text className="pl-2 mb-1">
+            编辑于：{postDetail.senderTime}
+          </Text>
         </View>
-        {/* 分割线 */}
-        <View className="bg-gray-300 h-1.5"></View>
         {/* 评论区 */}
-        <Text className="text-xl font-semibold my-1" ref={commentAreaRef}>全部评论</Text>
-        <CommentItem comments={comments}></CommentItem>
+        <View className="bg-white mt-2 px-2 rounded">
+          <Text className="text-xl font-semibold my-1" ref={commentAreaRef}>全部评论</Text>
+          <CommentItem comments={comments}></CommentItem>
+        </View>
       </ScrollView>
-      <BottomCount postData={postDetail.postData} commentShow={commentShow}></BottomCount>
-
+      <BottomCount
+        postData={postDetail}
+        commentShow={commentShow}
+        isCollection={isCollection}
+        isLike={isLike}
+        collectionClick={collectionClick}
+        likeClick={likeClick}
+      ></BottomCount>
     </SafeAreaView>
   );
 };

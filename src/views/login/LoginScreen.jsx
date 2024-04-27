@@ -21,7 +21,7 @@ const LoginScreen = () => {
   const navigation = useNavigation();
   /**
    * 配置 style 的样式
-   * @type {{boxShadow: {}, container: {}, backgroundImage: {}}}
+   * @type {{boxShadow: {}}}
    */
   const styles = StyleSheet.create({
     boxShadow: {}
@@ -192,6 +192,7 @@ const LoginScreen = () => {
   });
   const animationSequence = Animated.sequence([moveUsernameOut, movePasswordIn]);
   useEffect(() => {
+    AsyncStorage.clear()
     Animated.timing(animatedValue, {
       toValue: 1,
       duration: 500,
@@ -216,7 +217,19 @@ const LoginScreen = () => {
             <TextInput placeholder="请输入用户名" value={userName} onChange={setUserName}></TextInput>
           </View>
         </View>
-        <Text className="mt-2">未注册账号将会自动注册</Text>
+        <View className="flex-row justify-between">
+          <Text className="mt-2">未注册账号将会自动注册</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Home')
+            }}
+            className="flex-row justify-center items-center"
+          >
+            <Text className="text-blue-500 font-bold leading-8">
+              跳过登录
+            </Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
     )
   }

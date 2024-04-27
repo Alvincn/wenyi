@@ -1,16 +1,15 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import {baseHTTPURL} from "../config/config";
 const request = axios.create({
   baseURL: baseHTTPURL,
-  timeout: 5000
+  timeout: 50000
 })
 // 请求拦截器
 request.interceptors.request.use(async config => {
-  let token = await AsyncStorage.getItem('token')
+  let token = await AsyncStorage.getItem('wenyiToken')
   if (token) {
-    config.headers.Authorization = 'Bearer ' + await AsyncStorage.getItem('token')
+    config.headers['Authorization'] = await AsyncStorage.getItem('wenyiToken')
   }
   return config
 })

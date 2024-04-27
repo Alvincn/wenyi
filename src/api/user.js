@@ -21,3 +21,14 @@ export const postRegister = (user) => {
 export const postLogin = (user) => {
   return request.post('/user/login', user)
 }
+
+export const getUserInfo = () => {
+  return request.get('/user/getUserInfo')
+}
+
+/**
+ * 更新用户信息
+ */
+export const updateUserInfo = (userInfo) => {
+  return request.post('/user/updateInfo', userInfo)
+}

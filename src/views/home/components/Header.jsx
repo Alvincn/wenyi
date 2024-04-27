@@ -7,7 +7,7 @@ import TabBar from "./TabBar";
 import {HomeTab} from "../../../config/config";
 import {useCurrentRoute} from "../../../utils/routeUtils";
 
-const Header = () => {
+const Header = ({userInfo}) => {
   const currentRouter = useCurrentRoute();
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -43,7 +43,7 @@ const Header = () => {
       <TouchableOpacity
         onPress={() => {navigation.navigate("Mine")}}
       >
-        <Image source={require('../imgs/ocba.jpg')} style={{width: 30, height: 30, borderRadius: 50}}></Image>
+        <Image source={{uri: userInfo.avatar || themeColor.noAvatar}} style={{width: 35, height: 35, borderRadius: 50}}></Image>
       </TouchableOpacity>
       <View className="flex-row justify-center">
         <TabBar tabs={HomeTab} onTabPress={onTabPress} activeIndex={activeIndex} />

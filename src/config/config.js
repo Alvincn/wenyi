@@ -10,10 +10,16 @@ export const communityTab = [
 ]
 
 // 默认路由地址
-export const baseHTTPURL = 'http://192.168.1.7:8080/'
+export const baseHTTPURL = 'http://192.168.1.2:8080/'
+
+// 国家级非物质文化遗产地址
+export const ihChinaHTTPURL = 'https://www.ihchina.cn/'
 
 // 默认用户信息
 export const userInfo = {
   userName: '文化人',
   avatar: require('../../assets/img.png')
 }
+
+// 高德地图key
+export const MAP_KEY = '797033d3de3f6d6d49b240e22694321a'

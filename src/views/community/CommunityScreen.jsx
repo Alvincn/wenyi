@@ -17,7 +17,7 @@ const CommunityScreen = () => {
       source={require('./img/communityBack.png')}
       className="w-full h-full"
     >
-      <SafeAreaView className="w-full h-full p-4">
+      <SafeAreaView className="w-full h-full p-2">
         <Header></Header>
         {/*展示导航的地方*/}
         <Stack.Navigator

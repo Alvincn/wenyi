@@ -7,7 +7,7 @@ import {Ionicons} from "@expo/vector-icons";
 const CommentItem = ({comments}) => {
   const navigation = useNavigation();
   return (
-    <View className="mb-10">
+    <View className="mb-10 w-11/12">
       {comments.map((item, index) => {
         return (
           <View className="flex-row mb-3" key={index}>

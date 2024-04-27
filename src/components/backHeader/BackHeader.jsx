@@ -8,6 +8,7 @@ import {Ionicons} from "@expo/vector-icons";
  * @param title 中间内容
  * @param rightContent 右边的内容
  * @param rightHandle 右边点击触发函数
+ * @param leftHandle
  * @returns {JSX.Element}
  * @constructor
  */

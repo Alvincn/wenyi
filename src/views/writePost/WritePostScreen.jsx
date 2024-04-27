@@ -2,21 +2,12 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {useNavigation} from "@react-navigation/native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import BackHeader from "../../components/backHeader/BackHeader";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  StyleSheet,
-  View,
-  TouchableWithoutFeedback, TouchableOpacity
-} from 'react-native'
+import {Dimensions, PixelRatio, ScrollView, StyleSheet, Text, View} from 'react-native'
 import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
-import * as ImagePicker from 'expo-image-picker'
 import {Dialog, TextInput, Toast} from "@fruits-chain/react-native-xiaoshu";
-import MyRichEditor from "../../components/richEditor/myRichEditor";
-import {Ionicons} from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {deletePostDraft, getPostDraft, postSavePostsDraft} from "../../api/post";
+import {fileUpload, picketImage} from "../../utils/utils";
+
 const handleH1 = () => <Text style={styles.editorText}>H1</Text>
 const handleH2 = () => <Text style={styles.editorText}>H2</Text>
 const handleH3 = () => <Text style={styles.editorText}>H3</Text>
@@ -41,18 +32,32 @@ const WritePostScreen = () => {
   const navigation = useNavigation();
   const richText = React.useRef(null);
   const scrollContent = React.useRef(null);
-  const [postTitle, setPostTitle] = useState('')
+  const [postTitle, setPostTitle] = useState(null)
   const [currentTime, setCurrentTime] = useState('')
+  const [getDataFromWeb, setGetDataFromWeb] = useState(false)
+  /**
+   * 获取草稿信息
+   * @returns {Promise<void>}
+   */
+  const getStorageData = async () => {
+    const data = await getPostDraft();
+    if(data.data !== null) {
+      setPostTitle(data.data.title)
+      setContentText(data.data.content)
+      setGetDataFromWeb(true)
+    }else {
+      setPostTitle('')
+      setContentText('')
+      setGetDataFromWeb(false)
+    }
+
+  };
   useEffect(() => {
-    const getStorageData = async () => {
-      const data = await AsyncStorage.getItem('editPost');
-      const parseData = JSON.parse(data)
-      console.log('data',JSON.parse(data))
-      parseData.title? setPostTitle(parseData.title): setPostTitle('')
-      parseData.content? setContentText(parseData.content): setContentText('')
-    };
     getStorageData()
   }, []);
+  const windowWidth = Dimensions.get('window');
+  // 像素密度
+  const pixelDensity = PixelRatio.get();
   /**
    * 获取当前时间
    * @returns {string}
@@ -61,40 +66,49 @@ const WritePostScreen = () => {
     const date = new Date();
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()} : ${date.getMinutes()}`
   }
-  const preview = () => {
-    if(!postTitle.trim()) {
+  const preview = async () => {
+    if (!postTitle?.trim()) {
       return Toast({
         type: 'fail',
         message: '请输入标题'
       })
     }
-    if(!contentText.trim()) {
+    if (!contentText?.trim()) {
       return Toast({
         type: 'fail',
         message: '请输入内容'
       })
     }
-    navigation.navigate("Preview")
+    if(contentLength < 20){
+      return Toast('请至少输入20个文字')
+    }
+    let editPost = {
+      title: postTitle,
+      content: contentText
+    }
+    postSavePostsDraft(editPost).then(res => {
+      navigation.navigate("Preview")
+    })
   }
   /**
    * 选择图片
    */
-  const picketImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      base64: true,
-      allowsEditing: true,
-      quality: 1
-    })
-    if (result.canceled) {
-      return ''
+  const pressPicketImage = async () => {
+    richText.current.insertHTML('<br/>')
+    let result = await picketImage()
+    if(!result) return ''
+    let filePath = await fileUpload(result.assets[0])
+    return {
+      width: result.assets[0].width,
+      height: result.assets[0].height,
+      filePath: filePath
     }
-    return result.assets[0]
   }
   /**
    * 点击回退询问是否保存草稿
    */
   const leftHandle = () => {
-    if(contentText.trim()){
+    if(contentText?.trim()){
       Dialog.confirm({
         title: '提示',
         message: '编辑尚未完成，保存草稿吗？',
@@ -104,8 +118,20 @@ const WritePostScreen = () => {
             title: postTitle,
             content: contentText
           }
-          await AsyncStorage.setItem('editPost', JSON.stringify(editPost))
-          navigation.goBack()
+          postSavePostsDraft(editPost).then(res => {
+            navigation.goBack()
+          })
+        }
+        if(action === 'cancel') {
+          /**
+           * 用户选择不保存草稿，则不删除草稿
+           */
+          if(getDataFromWeb) {
+            await deletePostDraft()
+            navigation.goBack()
+          }else {
+            navigation.goBack()
+          }
         }
       })
     }else {
@@ -116,11 +142,8 @@ const WritePostScreen = () => {
    * 计算输入字数
    */
   const contentLength = useMemo(() => {
-    const matchRule = /<[^>]*>([^<]*)<\/[^>]*>/g;
-    if(!contentText.trim()) return;
-    const contentMatches = contentText.match(matchRule)
     setCurrentTime(getCurrentTime())
-    return contentMatches ? contentMatches.map(tag => tag.replace(/<\/?[^>]+>/g, '')).join('') : [];
+    return contentText?.replace( /<[^>]*>/g, '').trim().length
   }, [contentText])
   return (
     <SafeAreaView className="h-full w-full">
@@ -128,42 +151,57 @@ const WritePostScreen = () => {
       <ScrollView
         ref={scrollContent}
         className='bg-white pb-32 pt-2'>
-        <View className="flex-row items-center">
-          <Text className="text-lg font-bold pl-2">标题：</Text>
-          <TextInput placeholder="输入帖子标题" value={postTitle} onChange={setPostTitle}/>
+        <View className="flex-row items-center p-2">
+          <TextInput
+            style={{fontSize: 28, fontWeight: 'bold'}}
+            placeholder="帖子标题"
+            value={postTitle}
+            onChange={setPostTitle}/>
         </View>
         <View className="px-2 justify-between flex-row">
           <Text className="text-gray-400 items-center justify-center">
             上次修改时间: {getCurrentTime()}
           </Text>
-          <Text>字数:{contentLength?.length || 0}</Text>
+          <Text>字数:{contentLength || 0}</Text>
         </View>
-        <RichEditor
+        {contentText !== null &&<RichEditor
           ref={richText}
+          editorStyle={{
+            contentCSSText: 'font-size: 18px; line-height: 30px; '
+          }}
+          initialHeight={windowWidth.height}
           placeholder="请输入帖子正文"
           initialContentHTML={contentText}
-          style={{
-            backgroundColor: 'red'
-          }}
-          onChange={ descriptionText => {
+          onChange={descriptionText => {
             setContentText(descriptionText);
           }}
+          onKeyDown={({key, keyCode}) => {
+            if(key === 'Enter' && keyCode === 13 ){
+              scrollContent.current.scrollToEnd()
+            }
+          }}
           onPaste={data => {
-            console.log(data)
             scrollContent.current.scrollToEnd()
           }}
-        />
+        />}
       </ScrollView>
 
-      <RichToolbar
+      {contentText !== null && <RichToolbar
         className=" w-full bg-white"
         editor={richText}
         onPressAddImage={async () => {
-          let result = await picketImage()
-          if(result) {
-            richText.current.insertImage('data:image/jpeg;base64,'+result.base64)
-            richText.current.insertHTML('<br/>')
+          let result = await pressPicketImage()
+          if (result) {
+            const pixel = result.width / result.height;
+            richText.current.insertImage(result.filePath, `width: ${Dimensions.get('window').width}px; height: ${Dimensions.get('window').width / pixel}px; margin: 0 auto;`,)
+            setTimeout(() => {
+              richText.current.insertHTML('<br/>')
+            }, 200)
+            setTimeout(() => {
+              scrollContent.current.scrollToEnd()
+            }, 500)
           }
+
         }}
         actions={[
           actions.heading1,
@@ -182,8 +220,7 @@ const WritePostScreen = () => {
           [actions.heading2]: handleH2,
           [actions.heading3]: handleH3
         }}
-
-      />
+      />}
     </SafeAreaView>
   );
 };

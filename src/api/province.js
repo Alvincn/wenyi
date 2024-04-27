@@ -9,40 +9,36 @@ export const getALlProvince = () => {
 }
 /**
  * 通过省获取所有的市
- * @param provinceId
+ * @param pId
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
-export const getAllCitiesByProvince = (provinceId) =>{
+export const getAllCitiesByProvince = (pId) =>{
   return request.get('/area/getCities', {
     params: {
-      provinceId
+      pId
     }
   })
 }
 /**
  * 根据市获取所有的县
  * @returns {Promise<axios.AxiosResponse<any>>}
- * @param provinceId
- * @param cityId
+ * @param pId
  */
-export const getAllAreaByCity = (provinceId, cityId) =>{
+export const getAllAreaByCity = (pId) =>{
   return request.get('/area/getAreas', {
     params: {
-      provinceId,
-      cityId
+      pId: pId
     }
   })
 }/**
  * 根据市获取所有的乡
  * @returns {Promise<axios.AxiosResponse<any>>}
- * @param provinceId
- * @param cityId
+ * @param pId
  */
-export const getAllTowns = (provinceId, cityId) =>{
+export const getAllTowns = (pId) =>{
     return request.get('/area/getTowns', {
       params: {
-        provinceId,
-        cityId
+        pId
       }
     })
   }
