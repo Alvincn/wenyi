@@ -4,7 +4,6 @@ export const themeColor = {
   primary: '#4a9aff',
   primaryDiabled: 'rgba(161,209,255,0.5)',
   primaryBgImg: require('../../assets/backGround.png'),
-  primaryAvatar: require('../../assets/defaultImg.jpg'),
   mineDefaultBg: require('../../assets/defaultBack.jpg'),
   noAvatar: 'http://ivikey.top/server/image/noAvatar.png'
 }
