@@ -48,9 +48,9 @@ const Header = ({userInfo}) => {
       <View className="flex-row justify-center">
         <TabBar tabs={HomeTab} onTabPress={onTabPress} activeIndex={activeIndex} />
       </View>
-      <View className="w-6">
+      <TouchableOpacity className="w-6" onPress={() => {navigation.navigate("Search")}}>
         <Ionicons name="search" size={25} color={'black'} />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

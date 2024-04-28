@@ -80,6 +80,11 @@ const HeritageScreen = () => {
               placeholder="选择地区"
               onChange={v => {
                 setHeritages([])
+                setPage({
+                  current: 1,
+                  total: 0,
+                  total_page: 0
+                })
                 setSelectProvince(v)
               }}
             />
@@ -103,7 +108,7 @@ const HeritageScreen = () => {
       </View>
 
       {/* 数据区 */}
-      {loading && <LoadingItem loading={loading}></LoadingItem>}
+      {loading && <LoadingItem loading={loading} bgWhite={false}></LoadingItem>}
       {!loading && <View className="mb-20">
         <View className="flex-row justify-between my-1">
           <Text className="">共<Text className="font-bold">{page.total}</Text>条数据</Text>

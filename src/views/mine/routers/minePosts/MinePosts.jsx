@@ -1,13 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useNavigation} from "@react-navigation/native";
 import {RefreshControl, ScrollView, Text, View} from "react-native";
-import {getUserAllPosts} from "../../api/post";
-import PostItem from "../../components/postItem/PostItem";
-import {getGetLikes} from "../../api/likes";
-import {getGetCollections} from "../../api/collection";
+import {getUserAllPosts} from "../../../../api/post";
+import PostItem from "../../../../components/postItem/PostItem";
+import {getGetLikes} from "../../../../api/likes";
+import {getGetCollections} from "../../../../api/collection";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {getMyCollectionHeritage} from "../../api/heritage";
-import HeritageItem from "../../components/heritageItem/HeritageItem";
+import {getMyCollectionHeritage} from "../../../../api/heritage";
+import HeritageItem from "../../../../components/heritageItem/HeritageItem";
 
 const MinePosts = () => {
   const navigation = useNavigation();

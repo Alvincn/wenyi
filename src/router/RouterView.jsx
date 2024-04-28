@@ -12,6 +12,8 @@ import WritePostScreen from "../views/writePost/WritePostScreen";
 import PostPreview from "../views/postPreview/PostPreview";
 import EditUserInfo from "../views/editUserInfo/EditUserInfo";
 import HeritageDetailScreen from "../views/heritageDetail/HeritageDetailScreen";
+import SearchScreen from "../views/search/SearchScreen";
+import SearchResult from "../views/searchResult/SearchResult";
 const RouterView = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -19,6 +21,11 @@ const RouterView = () => {
       <Stack.Navigator>
         {/*首页*/}
         <Stack.Screen name="Home" component={FooterTab} options={{headerShown: false}}/>
+        {/*搜索*/}
+        <Stack.Screen name="Search" component={SearchScreen} options={{headerShown: false}}/>
+        {/*搜索结果*/}
+        <Stack.Screen name="SearchResult" component={SearchResult} options={{headerShown: false}}/>
+
         {/*编辑用户详情*/}
         <Stack.Screen name="EditUserInfo" component={EditUserInfo} options={{headerShown:false}}/>
 
@@ -26,13 +33,10 @@ const RouterView = () => {
         <Stack.Screen name="Preview" component={PostPreview} options={{headerShown:false}}/>
         {/*写帖子*/}
         <Stack.Screen name="WritePost" component={WritePostScreen} options={{headerShown: false}}/>
-
         {/*我的*/}
         <Stack.Screen name="Mine" component={MineScreen} options={{headerShown: false}}/>
         {/*登录&注册*/}
         <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
-
-
         {/*系统设置*/}
         <Stack.Screen name="Setting" component={SettingScreen} options={{headerShown: false}}/>
         {/*方言库*/}
@@ -43,6 +47,7 @@ const RouterView = () => {
         <Stack.Screen name="PostDetail" component={PostDetailScreen} options={{headerShown: false}}/>
         {/*非遗详情*/}
         <Stack.Screen name="HeritageDetail" component={HeritageDetailScreen} options={{headerShown: false}}/>
+
       </Stack.Navigator>
     </>
 

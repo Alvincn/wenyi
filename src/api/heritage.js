@@ -103,3 +103,26 @@ export const isCollectionHeritage = (params) => {
     params
   })
 }
+
+/**
+ * 关键词搜索
+ */
+export const getHeritageByKeyWord = keyWord => {
+  return new Promise(async (resolve, reject) => {
+    let baseUrl =
+      `https://www.ihchina.cn/getProject.html?province=&rx_time=&type=&cate=&keywords=${keyWord}&category_id=16&limit=10&p=1`
+    let result = await request.get(baseUrl)
+    return resolve(result.list)
+  })
+}
+
+/**
+ * 根据地点搜索
+ */
+export const reqGetHeritageByLocation = location => {
+  return request.get("/heritageList/localList", {
+    params: {
+      location
+    }
+  })
+}

@@ -1,10 +1,20 @@
-import React from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useNavigation} from "@react-navigation/native";
-import {View, Text, Dimensions, TouchableOpacity, Animated} from "react-native";
+import {View, Text, TouchableOpacity} from "react-native";
+import MinePosts from "../../mine/routers/minePosts/MinePosts";
+import HeritageResultItemScreen from "../routers/HeritageResultItemScreen";
+import PostResultItemScreen from "../routers/PostResultItemScreen";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
-import MinePosts from "../routers/minePosts/MinePosts";
+import UserResultItemScreen from "../routers/UserResultItemScreen";
+import SearchKeywordContext from "../../../context/SearchKeyWordContext";
 
-const userPost = () => {
+const ResultType = (props) => {
+  const navigation = useNavigation();
+  const {keyWord, setKeyword} = useContext(SearchKeywordContext)
+  useEffect(() => {
+    console.log(props.keyWord)
+    setKeyword(props.keyWord)
+  }, [props.keyWord])
   const Tab = createMaterialTopTabNavigator();
   const MyTabBar = ({ state, descriptors, navigation, position }) => {
     return (
@@ -28,7 +38,7 @@ const userPost = () => {
             });
 
             if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name, route.params);
+              navigation.navigate(route.name, { keyWord });
             }
           };
           return (
@@ -45,7 +55,7 @@ const userPost = () => {
                 {label}
               </Text>
               {isFocused?
-                <View className="w-5 h-1 bg-blue-600 rounded-2xl relative -top-1"></View>:
+                <View className="w-6 h-1 bg-blue-600 rounded-2xl relative -top-1"></View>:
                 <></>
               }
             </TouchableOpacity>
@@ -55,16 +65,16 @@ const userPost = () => {
     );
   }
   return (
-    <View className="bg-white p-2 h-full relative -top-5 rounded-r-2xl rounded-l-2xl">
+    <View className="h-full rounded-r-2xl rounded-l-2xl">
       <Tab.Navigator
         tabBar={props => <MyTabBar {...props} />}
       >
-        <Tab.Screen name="MinePosts" component={MinePosts} options={{title: '帖子'}}/>
-        <Tab.Screen name="MineLike" component={MinePosts} options={{title:'喜欢'}}/>
-        <Tab.Screen name="MineCollection" component={MinePosts} options={{title:'收藏'}}/>
+        <Tab.Screen initialParams={{keyWord: keyWord}} name="HeritageResult" component={HeritageResultItemScreen} options={{title: '非遗'}} />
+        <Tab.Screen initialParams={{keyWord: keyWord}} name="PostResult" component={PostResultItemScreen} options={{title:'帖子'}}/>
+        <Tab.Screen initialParams={{keyWord: keyWord}} name="UserResult" component={UserResultItemScreen} options={{title:'用户'}}/>
       </Tab.Navigator>
     </View>
   );
 };
 
-export default userPost;
+export default ResultType;

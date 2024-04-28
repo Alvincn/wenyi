@@ -40,9 +40,12 @@ const Header = () => {
   // 切换
   return (
     <View className="justify-between flex-row items-center mb-2">
-      <View className="w-6">
-        <Ionicons name="search" size={27} color={'black'} />
-      </View>
+      <TouchableOpacity
+        className="w-6"
+        onPress={() => {navigation.navigate("Search")}}
+      >
+        <Ionicons name="search" size={25} color={'black'} />
+      </TouchableOpacity>
       <View className="flex-row justify-center">
         <TabBar tabs={communityTab} onTabPress={onTabPress} activeIndex={activeIndex} />
       </View>

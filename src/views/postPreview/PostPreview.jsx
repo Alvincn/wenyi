@@ -179,8 +179,7 @@ const PostPreview = () => {
   const [isPrivate, setIsPrivate] = useState("1")
   return (
     <SafeAreaView>
-      <BackHeader title="发布
-      预览" rightContent={rightContent} rightHandle={handleSend}></BackHeader>
+      <BackHeader title="发布预览" rightContent={rightContent} rightHandle={handleSend}></BackHeader>
       <ScrollView>
         <View
           className="p-2 mb-20"

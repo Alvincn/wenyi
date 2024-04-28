@@ -138,9 +138,9 @@ const HeritageDetailScreen = ({route}) => {
           <View className="w-full p-2">
             <View className="my-2">
               <Text className="text-3xl font-bold text-center">
-                <Ionicons name="caret-back-outline" size={20}/>
-                {heritageInfo.title}
-                <Ionicons name="caret-forward" size={20}/>
+                {/*<Ionicons name="caret-back-outline" size={20}/>*/}
+                  {heritageInfo.title}
+                {/*<Ionicons name="caret-forward" size={20}/>*/}
               </Text>
               <View className="flex-row justify-center py-1">
                 <Text className="text-base text-center text-gray-400">{heritageInfo.project_num}</Text>

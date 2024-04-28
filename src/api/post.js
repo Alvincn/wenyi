@@ -70,3 +70,14 @@ export const getPostById = (postId) => {
     }
   })
 }
+
+/**
+ * 关键词搜索帖子
+ */
+export const getPostByKeyword = (keyword) => {
+  return request.get('/posts/getPostByKeyword', {
+    params: {
+      keyword
+    }
+  })
+}
