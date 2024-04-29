@@ -3,7 +3,7 @@ import {useNavigation} from "@react-navigation/native";
 import {View, Text, Image, StyleSheet, Platform, TouchableOpacity} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 
-const PostItem = ({postDetail, isCommunity = false}) => {
+const PostItem = ({postDetail, isCommunity = false, isUserCenter = false, isHome = false}) => {
   const [thisPostDetail, setThisPostDetail] = useState({});
   useEffect(() => {
     if(!postDetail) return
@@ -42,9 +42,13 @@ const PostItem = ({postDetail, isCommunity = false}) => {
       shadowRadius: 3,
     }
   } else if(Platform.OS === 'android'){
-    styles.boxShadow = {
-      shadowColor: 'gray',
-      elevation: 10
+    if(isHome) {
+      styles.boxShadow = {}
+    }else {
+      styles.boxShadow = {
+        shadowColor: 'gray',
+        elevation: 10
+      }
     }
   }
   const onLayout = event => {
@@ -78,16 +82,14 @@ const PostItem = ({postDetail, isCommunity = false}) => {
     }
     return (
       <View className="h-2 w-2 rounded-full mt-1 ml-0.5" style={{backgroundColor: status_color}}>
-        {/*<Text className="text-white">*/}
-        {/*  {status_text}*/}
-        {/*</Text>*/}
       </View>
     )
   }
   return thisPostDetail.coverImg?
+    // 竖排
     <TouchableOpacity
       style={[styles.boxShadow, styles.postItemFlex]}
-      className="bg-white p-2"
+      className={[isHome? "": "bg-white p-2" ].join()}
       onPress={() => {
         navigation.navigate('PostDetail', {
           postId: thisPostDetail.postId
@@ -122,7 +124,7 @@ const PostItem = ({postDetail, isCommunity = false}) => {
             </View>
             : <></>
         }
-        <View className="flex-row mx-0.5 ">
+        <View className="flex-row mx-0.5">
           <Ionicons name="eye-outline" size={15} color="gray"/>
           <Text className="pl-1 text-gray-500">{thisPostDetail.watchNumber}</Text>
         </View>
@@ -130,9 +132,10 @@ const PostItem = ({postDetail, isCommunity = false}) => {
 
     </TouchableOpacity>
     :
+    // 横排
     <TouchableOpacity
       style={[styles.boxShadow]}
-      className="bg-white p-2 m-1 w-full rounded-xl"
+      className={[isHome? "pt-1": "bg-white p-2", "m-1 w-full rounded-xl"].join(" ")}
       onLayout={onLayout}
       onPress={() => {
         navigation.navigate('PostDetail', {
@@ -149,7 +152,7 @@ const PostItem = ({postDetail, isCommunity = false}) => {
           {!isCommunity && !thisPostDetail?.noState && postStatus()}
         </View>
         {
-          thisPostDetail?.user?.avatar?
+          thisPostDetail?.user?.avatar && !isHome?
           <View className="flex-row items-center mb-1">
             <Image source={{uri: thisPostDetail.user.avatar}} width={25} height={25} className="rounded-full"></Image>
             <Text className="text-base">{thisPostDetail.user.nickname}</Text>

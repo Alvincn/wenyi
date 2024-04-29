@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useNavigation} from "@react-navigation/native";
 import {View, Text, TouchableOpacity, Image} from "react-native";
 import Avatar from "../../../components/avatar/Avatar";
@@ -8,7 +8,14 @@ import {themeColor} from "../../../config/theme";
 const userDetail = ({userDetail}) => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity className="flex-row bg-white pt-1 px-1.5">
+    <TouchableOpacity
+      className="flex-row bg-white pt-1 px-1.5"
+      onPress={() => {
+        navigation.navigate('UserCenter', {
+          userId: userDetail.id
+        })
+      }}
+    >
       <Avatar source={{uri: userDetail?.avatar || themeColor.noAvatar}}></Avatar>
       <View className="ml-1">
         <View className="flex-row">

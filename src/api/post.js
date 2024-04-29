@@ -60,6 +60,14 @@ export const  getUserAllPosts = () => {
   return request.get('/posts/getUserPosts')
 }
 
+export const getPersonAllPosts = (userId) => {
+  return request.get('/posts/getPersonPosts', {
+    params: {
+      userId
+    }
+  })
+}
+
 /**
  * 根据帖子id获取帖子
  */
@@ -80,4 +88,11 @@ export const getPostByKeyword = (keyword) => {
       keyword
     }
   })
+}
+
+/**
+ * 获取精选帖子
+ */
+export const getGoodsPosts = () => {
+  return request.get('/posts/getGoodPost')
 }

@@ -102,7 +102,7 @@ const HeritageResultItemScreen = () => {
         {/*缺醒状态*/}
         {
           heritageList.length === 0 && localHeritageList.length === 0? (
-            <View className="flex-row pt-16 justify-center items-center">
+            <View className="flex-row pt-2 justify-center items-center">
               <Text className="text-base font-bold">
                 啥也木有搜到呢，换个关键词试试😰
               </Text>

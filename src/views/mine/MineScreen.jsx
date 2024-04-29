@@ -20,7 +20,6 @@ const MineScreen = () => {
    */
   const reqGetUserInfo = () => {
     getUserInfo().then(async res => {
-      console.log(res)
       // 403未认证
       if (res.code !== 200) {
         setTimeout(() => {

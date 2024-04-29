@@ -1,15 +1,17 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useFocusEffect, useIsFocused, useNavigation} from "@react-navigation/native";
 import {ScrollView, RefreshControl} from "react-native";
 import Recommend from './components/Recommend';
 import ToolsTab from "./components/ToolsTab";
 import HotPost from "./components/HotPost";
 import {Toast} from "@fruits-chain/react-native-xiaoshu";
+import {getGoodsPosts} from "../../api/post";
 
 const HotScreen = () => {
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = React.useState(false);
+  const [goodPosts, setGoodPosts] = useState([])
   // 滚动到顶部的函数
   const scrollToTop = () => {
     if (scrollViewRef.current) {
@@ -20,17 +22,29 @@ const HotScreen = () => {
   // 下拉刷新
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    setTimeout(() => {
+    getGoodsPostsList().then(res => {
+      console.log(goodPosts)
       setRefreshing(false)
-    }, 1000)
+    })
   }, []);
+  /**
+   * 获取精选帖子
+   */
+  const getGoodsPostsList = async () => {
+    setRefreshing(true);
+    let result = await getGoodsPosts()
+    setRefreshing(false)
+    setGoodPosts(result.data)
+  }
+  useEffect(() => {
+    getGoodsPostsList()
+  }, [])
   return (
     /**
      * 滚动的时候触发：onMomentumScrollBegin
      * refreshControl：下拉刷新
      * showsVerticalScrollIndicator：
     */
-
     <ScrollView
       ref={scrollViewRef}
       refreshControl={
@@ -46,7 +60,7 @@ const HotScreen = () => {
       {/* 快捷跳转 */}
       <ToolsTab/>
       {/* 热门帖子 */}
-      <HotPost/>
+      <HotPost goodsList={goodPosts} clickRefresh={getGoodsPostsList}/>
     </ScrollView>
   );
 };

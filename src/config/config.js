@@ -10,7 +10,7 @@ export const communityTab = [
 ]
 
 // 默认路由地址
-export const baseHTTPURL = 'http://192.168.1.2:8080/'
+export const baseHTTPURL = 'http://192.168.1.5:8080/'
 
 // 国家级非物质文化遗产地址
 export const ihChinaHTTPURL = 'https://www.ihchina.cn/'

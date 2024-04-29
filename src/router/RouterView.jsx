@@ -14,6 +14,8 @@ import EditUserInfo from "../views/editUserInfo/EditUserInfo";
 import HeritageDetailScreen from "../views/heritageDetail/HeritageDetailScreen";
 import SearchScreen from "../views/search/SearchScreen";
 import SearchResult from "../views/searchResult/SearchResult";
+import UserCenterScreen from "../views/userCenter/UserCenterScreen";
+import HappyScreen from "../views/happy/HappyScreen";
 const RouterView = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -35,6 +37,7 @@ const RouterView = () => {
         <Stack.Screen name="WritePost" component={WritePostScreen} options={{headerShown: false}}/>
         {/*我的*/}
         <Stack.Screen name="Mine" component={MineScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="UserCenter" component={UserCenterScreen} options={{headerShown: false}}/>
         {/*登录&注册*/}
         <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
         {/*系统设置*/}
@@ -47,6 +50,7 @@ const RouterView = () => {
         <Stack.Screen name="PostDetail" component={PostDetailScreen} options={{headerShown: false}}/>
         {/*非遗详情*/}
         <Stack.Screen name="HeritageDetail" component={HeritageDetailScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="Happy" component={HappyScreen} options={{headerShown: false}}/>
 
       </Stack.Navigator>
     </>

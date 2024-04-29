@@ -20,13 +20,13 @@ const HeritageDetailScreen = ({route}) => {
   }])
   // 计算内容
   const heritageContent = useMemo(() => {
-      if(heritageInfo.content) {
-        let content = heritageInfo.content
-        content = content.replaceAll('&lt;br /&gt;', '').replace("\n", '').split(' ')
-        return content.join('')
-      }else {
-        return heritageInfo.title
-      }
+    if(heritageInfo.content) {
+      let content = heritageInfo.content
+      content = content.replaceAll('&lt;br /&gt;', '').replace("\n", '').split(' ')
+      return content.join('')
+    }else {
+      return heritageInfo.title
+    }
   }, [heritageInfo])
   /**
    * 获取用户是否关注了此非遗

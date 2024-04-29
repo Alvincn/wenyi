@@ -23,7 +23,15 @@ export const postLogin = (user) => {
 }
 
 export const getUserInfo = () => {
-  return request.get('/user/getUserInfo')
+  return request.get(`/user/getUserInfo`)
+}
+
+export const getPersonInfo = (userId) => {
+  return request.get(`/user/getPersonInfo`, {
+    params: {
+      userId
+    }
+  })
 }
 
 /**
@@ -31,4 +39,15 @@ export const getUserInfo = () => {
  */
 export const updateUserInfo = (userInfo) => {
   return request.post('/user/updateInfo', userInfo)
+}
+
+/**
+ * 关键词搜索用户
+ */
+export const searchUser = (keyword) => {
+  return request.get("/user/searchUser", {
+    params: {
+      keyword
+    }
+  })
 }
