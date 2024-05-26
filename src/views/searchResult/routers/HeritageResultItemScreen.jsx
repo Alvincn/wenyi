@@ -22,7 +22,7 @@ const HeritageResultItemScreen = () => {
     if (res) setHeritageList(res)
   }
   const renderHeritage = () => {
-    if(loading) return <></>
+    if(loading) return <LoadingItem loading={loading}></LoadingItem>
     if(localHeritageList.length <= 0) return <></>
     return localHeritageList.map((item, index) => {
       return (
@@ -86,50 +86,36 @@ const HeritageResultItemScreen = () => {
     setLocalHeritageList([])
     let res = await reqGetHeritageByLocation(keyword)
     setLocalHeritageList(res.data)
+    setLoading(false)
+
   }
   useEffect(() => {
     if(keyword) {
       setLoading(true)
       getHeritageList()
       getHeritageByLocation()
-      setLoading(false)
     }
   }, [keyword])
   return (
-    <View style={{height: Dimensions.get("screen").height - 130}}>
+    <View style={{height: Dimensions.get("screen").height - 130}} className="relative">
+      <LoadingItem loading={loading} className="w-full h-full"></LoadingItem>
       <ScrollView className="h-full bg-white px-2 rounded-xl" >
-        <LoadingItem loading={loading}></LoadingItem>
+
         {/*缺醒状态*/}
         {
-          heritageList.length === 0 && localHeritageList.length === 0? (
+          !loading? heritageList.length === 0 && localHeritageList.length === 0? (
             <View className="flex-row pt-2 justify-center items-center">
               <Text className="text-base font-bold">
                 啥也木有搜到呢，换个关键词试试😰
               </Text>
-            </View>): <></>
+            </View>): <></>: <></>
         }
-
-        {/*地区非遗*/}
-        {/*{*/}
-        {/*  heritageList.length > 0 && localHeritageList.length > 0? <Text className="text-xl font-bold text-blue-500 text-center">地区非遗</Text>: <></>*/}
-        {/*}*/}
-        {/*<View className={[heritageList.length > 0? "border-b-2 border-gray-300": ""].join(" ")}>*/}
-
         {
           renderCollapse(renderHeritage)
         }
-
-        {/*</View>*/}
-
-
-        {/*非遗列表*/}
-        {/*{*/}
-        {/*  heritageList.length > 0 && localHeritageList.length > 0? <Text className="text-xl font-bold text-blue-500 text-center">非遗列表</Text>: <></>*/}
-        {/*}*/}
         {
           !loading && heritageList.length > 0? heritageList.map((item, index) => {return <HeritageItem item={item} key={index}></HeritageItem>}) :<></>
         }
-
       </ScrollView>
     </View>
   );

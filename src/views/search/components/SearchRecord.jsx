@@ -17,7 +17,7 @@ const SearchRecord = () => {
     }
   }
   useEffect(() => {
-    navigation.addListener("focus", () => {
+    return navigation.addListener("focus", () => {
       getStorage()
     })
   }, []);

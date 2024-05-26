@@ -111,12 +111,9 @@ const MinePosts = () => {
   }, [currentRouter]);
   // 获取我所有的帖子
   useEffect(() => {
-    navigation.addListener("focus", (value) => {
+    return navigation.addListener("focus", (value) => {
       let currentRouter = value.target.split('-')[0]
       setCurrentRouter(currentRouter)
-    })
-    navigation.addListener("beforeRemove", (value) => {
-      navigation.removeListener("focus",() => {})
     })
   }, []);
   return (

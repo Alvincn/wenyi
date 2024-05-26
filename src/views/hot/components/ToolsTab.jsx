@@ -7,7 +7,7 @@ const ToolsTab = () => {
   const tools = [
     {
       title: '我的',
-      icon: require('../imgs/person.png'),
+      icon: require('../imgs/body.png'),
       src: 'Mine'
     },
     {
@@ -21,27 +21,27 @@ const ToolsTab = () => {
       src: 'MapView'
     },
     {
-      title: '逛逛',
-      icon: require('../imgs/deng.png'),
+      title: '帖子',
+      icon: require('../imgs/black.png'),
       src: 'Community'
     },
     {
       title: '反馈',
       icon: require('../imgs/back.png'),
-      src: 'Feedback'
+      src: 'FeedbackList'
     }
   ]
   return (
-    <View className="flex-row justify-between">
+    <View className="flex-row justify-between py-2 items-center">
       {
         tools.map((item, index) => {
           return (
             <TouchableOpacity
               key={index}
-              className="justify-center items-center pt-2 pb-2"
+              className="justify-end items-center pt-2 pb-2"
               onPress={() => {navigation.navigate(item.src)}}
             >
-              <Image source={item.icon} className="w-8 h-8"></Image>
+              <Image source={item.icon} className={[index !== 2? "w-8 h-8": "h-12 w-12", ].join(" ")} resizeMode={"contain"}></Image>
               <Text>{item.title}</Text>
             </TouchableOpacity>
           )

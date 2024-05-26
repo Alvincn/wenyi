@@ -18,7 +18,7 @@ const PostScreen = () => {
     })
   }
   useEffect(() => {
-    navigation.addListener("focus", () => {
+    return navigation.addListener("focus", () => {
       console.log('focus')
       getPosts()
     })

@@ -17,7 +17,7 @@ const BackHeader = ({title, rightContent, rightHandle, leftHandle}) => {
   return (
     <View className="flex-row justify-between p-3 border-b-2 border-gray-300 items-center">
       <TouchableOpacity
-        className='h-full w-8'
+        className='h-full w-12'
         onPress={() => {
           if(leftHandle) {
             leftHandle()
@@ -32,9 +32,15 @@ const BackHeader = ({title, rightContent, rightHandle, leftHandle}) => {
         {title}
       </Text>
       <TouchableOpacity
-        onPress={() => rightHandle()}
-        className="w-8">
-        {rightContent()}
+        onPress={() => {
+          if(rightHandle) {
+            rightHandle()
+          }
+        }}
+        className="w-12 flex-row justify-end text-right">
+        {
+          rightContent? rightContent(): null
+        }
       </TouchableOpacity>
     </View>
   );

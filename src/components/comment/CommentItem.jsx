@@ -13,7 +13,7 @@ const CommentItem = ({comments}) => {
         <Text className="text-2xl font-semibold my-2" >全部评论</Text>
         <Text className="pb-3">({comments.length}条)</Text>
       </View>
-      {comments.map((item, index) => {
+      {comments.length !== 0? comments.map((item, index) => {
         return (
           <View className="flex-row mb-4" key={index}>
             <TouchableOpacity
@@ -42,7 +42,7 @@ const CommentItem = ({comments}) => {
             </View>
           </View>
         )
-      })}
+      }): <Text className="text-center pt-4 text-base">暂无评论呢，快来发表第一条评论吧！🥰</Text>}
     </View>
   );
 };

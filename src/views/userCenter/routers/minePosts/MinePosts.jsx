@@ -24,6 +24,7 @@ const MinePosts = () => {
     setHeritageList([])
     setRefreshing(true)
     getPersonAllPosts(user.id).then(res => {
+      console.log(res)
       let dataArray = res.data
       setRefreshing(false)
       setPostsList(dataArray)
@@ -94,7 +95,7 @@ const MinePosts = () => {
     }
   }, [currentRouter, user]);
   useEffect(() => {
-    navigation.addListener("focus", (value) => {
+    return navigation.addListener("focus", (value) => {
       let currentRouter = value.target.split('-')[0]
       setCurrentRouter(currentRouter)
     })

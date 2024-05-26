@@ -59,7 +59,7 @@ const HeritageScreen = () => {
   }, [selectType, selectProvince])
   useEffect(() => {
     setLoading(true)
-    navigation.addListener("focus", () => {
+    return navigation.addListener("focus", () => {
       getData()
     })
   }, []);

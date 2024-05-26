@@ -226,3 +226,34 @@ export const TYPE = [
 
 // 新增项目 / 扩展项目 默认新增
 export const CATE = "1"
+
+// 反馈类型
+export const FEEDBACK_LIST = [
+  {
+    label: "bug",
+    value: 1
+  },
+  {
+    label: '功能优化',
+    value: 2
+  },
+  {
+    label: '功能调整',
+    value: 3
+  },
+  {
+    label: '新增功能',
+    value: 4
+  },
+  {
+    label: '其他',
+    value: 5
+  }
+]
+export const FEEDBACK_MAP = new Map([
+  [1, "bug"],
+  [2, "功能优化"],
+  [3, "功能调整"],
+  [4, "新增功能"],
+  [5, "其他"]
+])
